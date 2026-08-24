@@ -1,104 +1,70 @@
-\# Efficient Similarity Search in Text Embeddings
+# Efficient Similarity Search in Text Embeddings
 
+Experimental framework developed for a diploma thesis on exact and Approximate Nearest Neighbor (ANN) search over text embeddings.
 
+## Methods
 
-Experimental framework for evaluating exact and approximate nearest-neighbor search methods on text embeddings.
+- Exact Search / brute-force baseline
+- FAISS IVF (`IndexIVFFlat`)
+- FAISS HNSW (`IndexHNSWFlat`)
 
+## Dataset and embeddings
 
+- Dataset: AG News
+- Final collection: 100,000 texts
+- Embedding model: `sentence-transformers/all-MiniLM-L6-v2`
+- Embedding dimension: 384
+- Embeddings are L2-normalized before indexing
 
-\## Implemented Methods
+## Evaluation
 
+The benchmark measures:
 
+- Recall@5
+- Mean, median, standard deviation and P95 search latency
+- Queries per second
+- Speedup over Exact Search
+- Index build time
+- Serialized index size
+- Scaling from 1,000 to 100,000 embeddings
 
-\- Exact Search
+The final experiments also study the IVF `nprobe` and HNSW `efSearch` parameters and compare the two ANN methods at a common Recall@5 operating point.
 
-\- FAISS IVF
+## Final thesis benchmark settings
 
-\- FAISS HNSW
+- 100 query vectors
+- 10 timed repetitions per query
+- 10 warm-up queries
+- Fixed random seed: 42
+- One FAISS CPU thread for controlled timing
+- Nested dataset subsets for scaling
+- Exact Search used as the ground truth
 
+## Results files
 
+The repository includes the CSV outputs used for the final thesis analysis:
 
-\## Dataset and Embeddings
+- `benchmark_scaling_100k_exact_ivf_hnsw_results.csv`
+- `benchmark_ivf_nprobe_100k_results.csv`
+- `benchmark_hnsw_efsearch_100k_results.csv`
 
+## Installation
 
+```bash
+python -m venv venv
+```
 
-\- AG News dataset
+Windows:
 
-\- Sentence Transformers
+```bash
+venv\Scripts\activate
+python -m pip install -r requirements.txt
+```
 
-\- Model: all-MiniLM-L6-v2
+## Data files
 
-\- Embedding dimension: 384
+Generated embeddings, text arrays and serialized indexes are intentionally excluded from Git because they are reproducible and can be large. They are covered by `.gitignore`.
 
+## Reproducibility
 
-
-\## Evaluation Metrics
-
-
-
-\- Average, median and P95 search latency
-
-\- Recall@5
-
-\- Queries per second
-
-\- Speedup over Exact Search
-
-\- Index build time
-
-\- Index size
-
-\- Scaling with dataset size
-
-
-
-\## Main Experiments
-
-
-
-\- Exact vs IVF vs HNSW comparison
-
-\- IVF nprobe tuning
-
-\- HNSW efSearch tuning
-
-\- Scaling experiments
-
-\- Automatic CSV and plot generation
-
-
-
-\## Installation
-
-
-
-1\. Create a virtual environment:
-
-
-
-&#x20;  python -m venv venv
-
-
-
-2\. Activate it on Windows:
-
-
-
-&#x20;  venv\\Scripts\\activate
-
-
-
-3\. Install the required packages:
-
-
-
-&#x20;  python -m pip install -r requirements.txt
-
-
-
-\## Current Status
-
-
-
-The core implementation and the initial experimental evaluation have been completed. Larger-scale experiments and additional reproducibility tests are planned.
-
+The project separates embedding generation, index construction, benchmarking and plotting so that experiments can be rerun independently. Parameter values used in the final evaluation are documented in the thesis and in the benchmark scripts/results included here.

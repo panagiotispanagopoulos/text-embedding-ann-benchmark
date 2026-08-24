@@ -1,21 +1,23 @@
-# Virtual environment
-venv/
-
-# Python temporary files
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
 *.pyo
-*.pyd
 
-# Large generated files
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Generated data / large artifacts
 embeddings.npy
 texts.npy
-hnsw.index
+*.index
 
-# IDE files
+# IDE / OS
 .vscode/
 .idea/
-
-# Operating system files
 .DS_Store
 Thumbs.db
+
+# Misc
+*.log
